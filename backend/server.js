@@ -1,18 +1,55 @@
 require('dotenv').config()
-const express = require('express')
-const app = express()
 const mongoose = require('mongoose')
+const express = require('express')
+const cors = require('cors')
+const morgan = require('morgan');
+// const csurf = require('csurf');
+const helmet = require('helmet')
+const cookieParser = require('cookie-parser');
+const routes = require('./routes');
 
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true})
-const db = mongoose.connection
+const { environment } = require('./config');
+const isProduction = environment === 'production';
 
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('Conntected to Database'))
+const app = express()
 
-app.use(express.json()) // Lets the server accept JSON as a body instead of a post element.
+app.use(morgan('dev'))
+app.use(cookieParser());
+app.use(express.json());
 
-const flightsRouter =require('./routes/flights')
+if (!isProduction) {
+    // enable cors only in development
+    app.use(cors());
+  }
+  // helmet helps set a variety of headers to better secure your app
+  app.use(
+    helmet.crossOriginResourcePolicy({
+      policy: "cross-origin"
+    })
+  );
 
-app.use('/api/flights', flightsRouter)
+  // Set the _csrf token and create req.csrfToken method
+//   app.use(
+//     csurf({
+//       cookie: {
+//         secure: isProduction,
+//         sameSite: isProduction && "Lax",
+//         httpOnly: true
+//       }
+//     })
+//   );
 
-app.listen(3000, () => console.log('Listening on port 3000'))
+// routes
+app.use(routes);
+
+// DB start
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log("connected to DB", "running on", process.env.PORT);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
