@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const experienceSchema = new Schema({
   userId: {
-    type: Number,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   experience_points: {
