@@ -66,8 +66,6 @@ router.post("/signup", async (req, res) => {
     errors['exist'] = "Email or Username already exist"
   }
 
-  console.log("dsads");
-
   if (Object.values(errors).length) {
     return res.status(400).json(errors)
   }
@@ -76,7 +74,6 @@ router.post("/signup", async (req, res) => {
   const hash = await bcrypt.hash(password, salt);
 
   const user = await User.create({ email, username, password: hash });
-
   return res.status(200).json(user)
 });
 
