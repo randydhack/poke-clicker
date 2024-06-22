@@ -56,7 +56,8 @@ router.post("/signup", async (req, res) => {
 
   if (!validator.isAlphanumeric(username, "en-US", alphanumericOptions)) {
     errors['username'] = "Username must be alphanumeric (allowing '-', '.', and '_')"
-    
+
+
   }
 
   const usernameExists = await User.findOne({username});
