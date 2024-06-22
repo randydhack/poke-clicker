@@ -44,7 +44,6 @@ router.post("/signup", async (req, res) => {
   if (!validator.isStrongPassword(password, passwordCriteria)) {
     errors['password'] =
       "The password requires capital and lowercase letters, numbers, and symbols"
-
   }
 
   if (username.length > 25) {
@@ -57,13 +56,16 @@ router.post("/signup", async (req, res) => {
 
   if (!validator.isAlphanumeric(username, "en-US", alphanumericOptions)) {
     errors['username'] = "Username must be alphanumeric (allowing '-', '.', and '_')"
+    
   }
 
   const usernameExists = await User.findOne({username});
-  const emailExists = await User.findOne({username});
+  const emailExists = await User.findOne({email});
   if (emailExists || usernameExists) {
     errors['exist'] = "Email or Username already exist"
   }
+
+  console.log("dsads");
 
   if (Object.values(errors).length) {
     return res.status(400).json(errors)
