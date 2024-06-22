@@ -16,7 +16,6 @@ router.get("/", async (req, res) => {
   return res.status(200).json(user);
 });
 
-
 // Signup Route Validation
 router.post("/signup", async (req, res) => {
   const { email, username, password } = req.body;
