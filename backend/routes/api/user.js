@@ -5,7 +5,6 @@ const User = require("../../model/UserModel");
 const bcrypt = require('bcrypt')
 const validator = require("validator");
 
-
 // Get current User
 router.get("/", async (req, res) => {
   const { user } = req;
