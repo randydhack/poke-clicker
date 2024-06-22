@@ -77,7 +77,6 @@ router.post("/signup", async (req, res) => {
   return res.status(200).json(user)
 });
 
-
 // Login Route Validation
 router.post('/login', async (req, res) => {
     // Validation
